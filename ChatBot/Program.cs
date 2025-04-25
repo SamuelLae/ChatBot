@@ -100,6 +100,7 @@ public class Bot{
         // log(msg, user, w);
       }
     } else{
+      Console.WriteLine("Test");
       string CommandChack = Parser.getCommand(prefix, msg);
       Console.WriteLine(CommandChack);
       switch(CommandChack){
