@@ -88,8 +88,6 @@ public class Bot{
 
     public static async Task<string> handleMessage(string msg, string user, bool write, char prefix){
 
-      Console.WriteLine("Hej");
-
     if(write){
       using (StreamWriter w = File.AppendText("chat.log")){
         log(msg, user, w);
@@ -103,6 +101,7 @@ public class Bot{
       }
     } else{
       string CommandChack = Parser.getCommand(prefix, msg);
+      Console.WriteLine(CommandChack);
       switch(CommandChack){
         case "rev":
           Console.WriteLine(Parser.Rev(Parser.getArgs(prefix, msg)[0]));
