@@ -99,7 +99,7 @@ public class Bot{
 
     if (Parser.RemoveFromPrefix(prefix, msg) == msg){
       using (StreamWriter w = File.AppendText("chat.log")){
-         log(msg, user, w);
+         // log(msg, user, w);
       }
     } else{
       string CommandChack = Parser.getCommand(prefix, msg);
