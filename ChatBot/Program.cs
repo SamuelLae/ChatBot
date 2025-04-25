@@ -88,12 +88,14 @@ public class Bot{
 
     public static async Task<string> handleMessage(string msg, string user, bool write, char prefix){
 
+      /*
     if(write){
       using (StreamWriter w = File.AppendText("chat.log")){
         log(msg, user, w);
        
       }
     }
+    */
 
     if (Parser.RemoveFromPrefix(prefix, msg) == msg){
       using (StreamWriter w = File.AppendText("chat.log")){
@@ -126,7 +128,6 @@ class Parser(){
 
     public static string getCommand(char prefix,string input){
     var Command = RemoveFromPrefix(prefix, input);
-    int found = 0;
 
     string[] subs = Command.Split(' ');
 
@@ -156,9 +157,9 @@ class Parser(){
     char[] charReverseString = arg.ToCharArray();
     Array.Reverse(charReverseString);
     string charString = new string(charReverseString);
-    // using (StreamWriter w = File.AppendText("chat.log")){
-    // Log.log(charString, "samuel", w);
-    // };
+     using (StreamWriter w = File.AppendText("chat.log")){
+     Log.log(charString, "samuel", w);
+     };
     return new string(charReverseString);
   }
 
