@@ -12,3 +12,4 @@ C:\Users\sl8342\OneDrive\Programering\c#\ChatBot\ChatBot\obj\Debug\net8.0\refint
 C:\Users\sl8342\OneDrive\Programering\c#\ChatBot\ChatBot\obj\Debug\net8.0\ChatBot.pdb
 C:\Users\sl8342\OneDrive\Programering\c#\ChatBot\ChatBot\obj\Debug\net8.0\ChatBot.genruntimeconfig.cache
 C:\Users\sl8342\OneDrive\Programering\c#\ChatBot\ChatBot\obj\Debug\net8.0\ref\ChatBot.dll
+C:\Users\sl8342\OneDrive\Programering\c#\ChatBot\ChatBot\obj\Debug\net8.0\ChatBot.sourcelink.json
