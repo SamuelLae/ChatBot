@@ -88,14 +88,14 @@ public class Bot{
 
     public static async Task<string> handleMessage(string msg, string user, bool write, char prefix){
 
-      /*
+      
     if(write){
       using (StreamWriter w = File.AppendText("chat.log")){
         log(msg, user, w);
        
       }
     }
-    */
+    
 
     if (Parser.RemoveFromPrefix(prefix, msg) == msg){
       using (StreamWriter w = File.AppendText("chat.log")){
