@@ -156,9 +156,9 @@ class Parser(){
     char[] charReverseString = arg.ToCharArray();
     Array.Reverse(charReverseString);
     string charString = new string(charReverseString);
-    using (StreamWriter w = File.AppendText("chat.log")){
-    Log.log(charString, "samuel", w);
-    };
+    // using (StreamWriter w = File.AppendText("chat.log")){
+    // Log.log(charString, "samuel", w);
+    // };
     return new string(charReverseString);
   }
 
