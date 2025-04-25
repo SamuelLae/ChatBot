@@ -105,10 +105,18 @@ public class Bot{
       string CommandChack = Parser.getCommand(prefix, msg);
       switch(CommandChack){
         case "rev":
-          Console.WriteLine(Parser.Rev(Parser.getArgs(prefix, msg)[0]));
+          string revRecived = (Parser.Rev(Parser.getArgs(prefix, msg)[0]));
+          Console.WriteLine(revRecived);
+          using (StreamWriter w = File.AppendText("chat.log")){
+         log(revRecived, user, w);
+          }
           break;
         case "joke":
-          Console.WriteLine(await Parser.Joke());
+        string jokeRecived = await Parser.Joke();
+          Console.WriteLine(jokeRecived);
+          using (StreamWriter w = File.AppendText("chat.log")){
+         log(jokeRecived, user, w);
+          }
         break;
       }
     }
