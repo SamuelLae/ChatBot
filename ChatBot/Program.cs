@@ -175,17 +175,15 @@ class Parser(){
     using (HttpClient FetchJoke = new HttpClient()){
       FetchJoke.BaseAddress = new Uri("https://icanhazdadjoke.com");
       FetchJoke.DefaultRequestHeaders.Add("Accept", "text/plain");
+      
        try{
       HttpResponseMessage response = await FetchJoke.GetAsync("");
       response.EnsureSuccessStatusCode();
       string responseBody = await response.Content.ReadAsStringAsync();
       string JsonString = JsonSerializer.Serialize(responseBody, options);
-      using (StreamWriter w = File.AppendText("chat.log")){
-      Log.log(JsonString, "samuel", w);
-      };
       return JsonString;
       } catch (HttpRequestException e){
-        return e.Message;
+        return e.InnerException.ToString();
       }
        
     };
