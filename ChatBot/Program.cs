@@ -20,7 +20,10 @@ public class Bot{
     public Bot(){
     client = new();
   }
-
+/// <summary>
+/// Connects to the dedicated ws server
+/// </summary>
+/// <returns></returns>
   public async Task Connect(){
     string ServerUrl = "wss://echo.websocket.in";
     client = new ClientWebSocket();
@@ -28,27 +31,39 @@ public class Bot{
     Console.ReadKey();
   }
   
-  string UserOuthToken;
-  string UserAccountName;
+  string userOuthToken;
+  string userAccountName;
   
-
+/// <summary>
+/// Takes the users name and "password" from a seperate file
+/// </summary>
+/// <returns></returns>
       public async Task GetOuthToken(){
       using (StreamReader w = new("UserData.txt")){
       string[] UserDataString = w.ReadToEnd().Split('\n');
-      UserOuthToken = UserDataString[1];
-      UserAccountName = UserDataString[0];
+      userOuthToken = UserDataString[1];
+      userAccountName = UserDataString[0];
       }
 
   }
-
+/// <summary>
+/// Allows users to send messages, which also logs them
+/// </summary>
+/// <returns></returns>
       async Task Send(){
       Console.WriteLine("Send message: ");
       string message = Console.ReadLine();
+      while (message == ""){
+        Console.WriteLine("Send message: ");
+      }
       await Log.handleMessage(message, "Samuel", true, '#');
       byte[] buffer = Encoding.UTF8.GetBytes(message);
       await client.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
     }
-
+/// <summary>
+/// Allows the server to revive the message sent to the server
+/// </summary>
+/// <returns></returns>
       async Task<string> Recive(){
         byte[] receiveBuffer = new byte[1024];
       WebSocketReceiveResult result = await client.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
@@ -62,12 +77,16 @@ public class Bot{
       return "";
       
     }
-
+/// <summary>
+/// Sends the verification information to the server to see if you can pass through
+/// </summary>
+/// <returns></returns>
+/// <exception cref="ErrorMessage"></exception>
     public async Task SendVerification(){
-      await Log.handleMessage(UserOuthToken, UserAccountName, true, '#');
-      byte[] buffer = Encoding.UTF8.GetBytes(UserOuthToken);
+      await Log.handleMessage(userOuthToken, userAccountName, true, '#');
+      byte[] buffer = Encoding.UTF8.GetBytes(userOuthToken);
       await client.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
-      buffer = Encoding.UTF8.GetBytes(UserAccountName);
+      buffer = Encoding.UTF8.GetBytes(userAccountName);
       await client.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
       await Recive();
       if (await Recive() == ":tmi.twitch.tv NOTICE * :Login authentication failed"){
@@ -85,7 +104,14 @@ public class Bot{
 
 
    public static class Log{
-
+/// <summary>
+/// Handels the messages that are sent to see if they are commands etc.
+/// </summary>
+/// <param name="msg"></param>
+/// <param name="user"></param>
+/// <param name="write"></param>
+/// <param name="prefix"></param>
+/// <returns></returns>
     public static async Task<string> handleMessage(string msg, string user, bool write, char prefix){
 
       
@@ -102,13 +128,13 @@ public class Bot{
          //log(msg, user, w);
       }
     } else{
-      string CommandChack = Parser.getCommand(prefix, msg);
-      switch(CommandChack){
+      string isCommand = Parser.getCommand(prefix, msg);
+      switch(isCommand){
         case "rev":
-          string revRecived = Parser.Rev(Parser.getArgs(prefix, msg)[0]);
-          Console.WriteLine(revRecived);
+          string reversedText = Parser.Rev(Parser.getArgs(prefix, msg)[0]);
+          Console.WriteLine(reversedText);
           using (StreamWriter w = File.AppendText("chat.log")){
-         log(revRecived, user, w);
+         log(reversedText, user, w);
           }
           break;
         case "joke":
@@ -124,7 +150,12 @@ public class Bot{
      return $"| {DateTime.Now.ToLongTimeString()} | {user} | {msg} |";
   
 }
-
+/// <summary>
+/// Logs the message in a readable way
+/// </summary>
+/// <param name="msg"></param>
+/// <param name="user"></param>
+/// <param name="w"></param>
 public static void log(string msg, string user, StreamWriter w){
     w.WriteLine($"| {DateTime.Now.ToLongTimeString()} | {user} | {msg} |");
   }
@@ -133,7 +164,12 @@ public static void log(string msg, string user, StreamWriter w){
 
 
 class Parser(){
-
+/// <summary>
+/// Gets the command that is in the sent string
+/// </summary>
+/// <param name="prefix"></param>
+/// <param name="input"></param>
+/// <returns></returns>
     public static string getCommand(char prefix,string input){
     var Command = RemoveFromPrefix(prefix, input);
 
@@ -144,30 +180,45 @@ class Parser(){
     }
     return subs[0];
   }
-
+/// <summary>
+/// Removes unnececary text in a command
+/// </summary>
+/// <param name="prefix"></param>
+/// <param name="input"></param>
+/// <returns></returns>
     public static string RemoveFromPrefix(char prefix,string input){
-    int found = 0;
+    int prefixIndex = 0;
 
-    found = input.IndexOf(prefix);
+    prefixIndex = input.IndexOf(prefix);
     // Console.WriteLine("  {0}", input.Substring(found + 1));
 
-    return input.Substring(found + 1);
+    return input.Substring(prefixIndex + 1);
   }
-
+/// <summary>
+/// Takes in the arguments that are sent in a command
+/// </summary>
+/// <param name="prefix"></param>
+/// <param name="input"></param>
+/// <returns></returns>
   public static string[] getArgs(char prefix,string input){
     input = RemoveFromPrefix(prefix, input);
 
-    string[] subs = input.Split(' ');
-    return subs[1..];
+    return input.Split(" ")[1..];
     }
-
+/// <summary>
+/// Reverses the users text that they send
+/// </summary>
+/// <param name="arg"></param>
+/// <returns></returns>
   public static string Rev(string arg){
     char[] charReverseString = arg.ToCharArray();
     Array.Reverse(charReverseString);
-    string charString = new string(charReverseString);
     return new string(charReverseString);
   }
-
+/// <summary>
+/// Sends the user a funny dad joke
+/// </summary>
+/// <returns></returns>
   public static async Task<string> Joke(){
     JsonSerializerOptions options = new JsonSerializerOptions{WriteIndented = true};
 
