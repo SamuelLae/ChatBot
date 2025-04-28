@@ -171,8 +171,11 @@ class Parser(){
   public static async Task<string> Joke(){
     JsonSerializerOptions options = new JsonSerializerOptions{WriteIndented = true};
 
+    var handler = new HttpClientHandler() { 
+    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator};
 
-    using (HttpClient FetchJoke = new HttpClient()){
+
+    using (HttpClient FetchJoke = new HttpClient(handler)){
       FetchJoke.BaseAddress = new Uri("https://icanhazdadjoke.com");
       FetchJoke.DefaultRequestHeaders.Add("Accept", "text/plain");
       
