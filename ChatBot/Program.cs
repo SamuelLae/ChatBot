@@ -55,6 +55,7 @@ public class Bot{
       string message = Console.ReadLine();
       while (message == ""){
         Console.WriteLine("Send message: ");
+        message = Console.ReadLine();
       }
       await Log.handleMessage(message, "Samuel", true, '#');
       byte[] buffer = Encoding.UTF8.GetBytes(message);
