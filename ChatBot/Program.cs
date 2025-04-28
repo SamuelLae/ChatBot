@@ -171,24 +171,7 @@ class Parser(){
   public static async Task<string> Joke(){
     JsonSerializerOptions options = new JsonSerializerOptions{WriteIndented = true};
 
-      using (HttpClient chuckNorris = new HttpClient()){
-      chuckNorris.BaseAddress = new Uri("https://api.chucknorris.io/");
-       try{
-      HttpResponseMessage response = await chuckNorris.GetAsync("jokes/random");
-      response.EnsureSuccessStatusCode();
-      string responseBody = await response.Content.ReadAsStringAsync();
-      string JsonString = JsonSerializer.Serialize(responseBody, options);
-      Console.WriteLine(JsonString);
-      return JsonString;
-      } catch (HttpRequestException e){
-        Console.WriteLine(e.Message);
-        return e.Message;
-      }
-      
-       
-    };
 
-    /*
     using (HttpClient FetchJoke = new HttpClient()){
       FetchJoke.BaseAddress = new Uri("https://icanhazdadjoke.com");
       FetchJoke.DefaultRequestHeaders.Add("Accept", "text/plain");
@@ -206,8 +189,6 @@ class Parser(){
       }
        
     };
-
-    */
   }
 }
 
